@@ -1,0 +1,22 @@
+[project]
+name = "projekt2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "DominikVelic", email = "dominikvelic@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "pandas>=3.1.1",
+    "scikit-learn>=1.9.1",
+    "torch>=2.15.0",
+]
+
+[project.scripts]
+projekt2 = "projekt2:main"
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
