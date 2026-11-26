@@ -1,7 +1,6 @@
 import argparse
 from pathlib import Path
-
-from hns_projekt2.train.data.yolo import prepare_dataset_for_yolo
+from hns_projekt2.train.dataset import prepare_dataset
 
 type Split = tuple[int, int] | tuple[int, int, int]
 
@@ -20,19 +19,20 @@ def match_split(args: str) -> Split:
 def main():
     parser = argparse.ArgumentParser(
                     prog='Yolo dataset preparation',
-                    description='Prepare dataset for yolo usage, splits image paths into good_wear and bad_wear classes with a split passed in arguments',
+                    description='Prepare dataset for training, splits image paths into good_wear and bad_wear classes with a split passed in arguments',
                     )
 
-    parser.add_argument('-d', '--dataset_root', type=str, required=True)
+    parser.add_argument('-d', '--dataset_root', type=str, required=True, help="Data root from where images will be taken")
     parser.add_argument('-s', '--split', help="Should be in form of 70,15,15 or 70,15 for example", type=str, default="70,15,15")
-    parser.add_argument('--seed', default=2026, type=int)
+    parser.add_argument('--slice', help="Slice how many images should be used to generate dataset, slice of 0 will use whole dataset", type=int, default=0)
+    parser.add_argument('--seed', default=2026, type=int, help="Seed to use for random image set")
     parser.add_argument('--symlink', action="store_true", help="Only symlink images, instead of copying to save disk space")
-    parser.add_argument('--recreate', action="store_true", help="Set if you want to remove an old yolo dataset and recreate it from scrach")
+    parser.add_argument('--recreate', action="store_true", help="Set if you want to remove an old dataset and recreate it from scrach")
     args = parser.parse_args()
 
     dataset_root = Path(args.dataset_root).resolve()
     d_split = match_split(args.split)
-    prepare_dataset_for_yolo(dataset_root, d_split, args.seed, args.symlink, args.recreate)
+    prepare_dataset(dataset_root, d_split, args.slice, args.seed, args.symlink, args.recreate)
 
 if __name__ == "__main__":
     main()
